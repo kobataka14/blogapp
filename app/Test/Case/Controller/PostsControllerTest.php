@@ -1,0 +1,59 @@
+<?php
+App::uses('PostsController', 'Controller');
+App::uses('Fabricate', 'Fabricate.Lib');
+
+/**
+ * PostsController Test Case
+ *
+ */
+class PostsControllerTest extends ControllerTestCase {
+
+/**
+ * Fixtures
+ *
+ * @var array
+ */
+	public $fixtures = array(
+		'app.post'
+	);
+
+	public function setUp(){
+		parent::setUp();
+		$this->controller = $this->generate('Posts', [
+			'components' => ['Paginator', 'Session'],
+			'models' => ['Post' => ['save']],
+			'methods' => ['redirect']
+		]);
+
+		$this->controller->autoRender = false;
+	}
+
+	public function testIndexアクションではペーイングの結果がpostsにセットされること(){
+		$post = Fabricate::build('Post');
+		$this->controller->Paginator->expects($this->once())
+			->method('paginate')->will($this->returnValue($post->data));
+
+		$vars = $this->testAction('/usre/blog', ['method'=>'get','return'=>'vars']);
+
+		$this->assertEquals($post->data, $vars['posts']);
+	}
+
+	public function testAddアクションで保存が失敗した時メッセージがセットされること(){
+		$this->controller->Post->expects($this->once())->method('save')->will($this->returnValue(false));
+		$this->controller->Session->expects($this->once())->method('setFlash')->with($this->equalTo('記事の投稿に失敗しました。入力内容を確認して再度投稿してください。'));
+
+		$this->testAction('/blogs/new', ['method'=>'post','data'=>['title'=>'title1', 'body'=>'body1']]);
+	}
+
+	public function testAddアクションで保存が成功したときはメッセージがセットされ一覧表示にリダイレクトされること(){
+		$this->controller->Post->expects($this->once())
+			->method('save')->will($this->returnValue(true));
+
+		$this->controller->Session->expects($this->once())->method('setFlash')->with($this->equalTo('新しい記事を受け付けました。'));
+		$this->controller->expects($this->once())->method('redirect')->with($this->equalTo(['action'=>'index']));
+
+		$this->testAction('/blogs/new', ['method'=>'post','data'=>['title'=>'title1', 'body'=>'body1']]);
+
+	}
+
+}
