@@ -1,4 +1,4 @@
-<phpunit bootstrap="bootstrap.php">
+<phpunit>
 	<logging>
 		<log type="coverage-clover" target="./reports/coverage.xml" />
 		<log type="junit" target="./reports/unittest.xml" />
