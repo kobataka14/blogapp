@@ -38,21 +38,20 @@ class PostTest extends CakeTestCase {
 		parent::tearDown();
 	}
 
-	public function test適当(){
-		$post = Fabricate::attributes_for('Post', function($data){
-			$faker = Faker\Factory::create('ja_JP');
-	    	return ["created" => "2013-10-09 12:40:28", "title" => $faker->address];
-		});
-		$this->assertEquals('eee', $post[0]['title']);
-	}
-
 	/**
 	 * @dataProvider exampleValidationErrors
 	 */
 	public function testバリデーションエラー($column, $value, $message){
+		$default = ["title"=>"タイトル","body"=>"本文"];
+		$this->Post->create(array_merge($default, [$column=>$value]));
+		$this->assertFalse($this->Post->validates());
+		$this->assertEquals([$message],$this->Post->validationErrors[$column]);
+
+		/*
 		$post = Fabricate::build('Post', [$column=>$value]);
 		$this->assertFalse($post->validates());
 		$this->assertEquals([$message], $this->Post->validationErrors[$column]);
+		*/
 	}
 
 	public function exampleValidationErrors(){
