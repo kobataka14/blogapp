@@ -1,0 +1,14 @@
+<phpunit>
+	<logging>
+		<log type="coverage-clover" target="./reports/coverage.xml" />
+		<log type="junit" target="./reports/unittest.xml" />
+	</logging>
+
+	<filter>
+		<blacklist>
+			<directroy suffix=".php">Plugin</directroy>
+			<directroy suffix=".php">Test</directroy>
+			<directroy suffix=".php">Vendor</directroy>
+		</blacklist>
+	</filter>
+</phpunit>
