@@ -9,6 +9,8 @@
 			<directroy suffix=".php">Plugin</directroy>
 			<directroy suffix=".php">Test</directroy>
 			<directroy suffix=".php">Vendor</directroy>
+			<directory suffix=".php">Config/bootstrap</directory>
+			<file>Config/database.php</file>
 		</blacklist>
 	</filter>
 </phpunit>
