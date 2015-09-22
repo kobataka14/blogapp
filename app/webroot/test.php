@@ -1,13 +1,14 @@
 <?php
 /**
- * Index
+ * Web Access Frontend for TestSuite
  *
- * The Front Controller for handling every request
- *
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @link          http://book.cakephp.org/2.0/en/development/testing.html
  * @package       app.webroot
- * @since         CakePHP(tm) v 0.2.9
+ * @since         CakePHP(tm) v 1.2.0.4433
  */
+
+set_time_limit(0);
+ini_set('display_errors', 1);
 
 /**
  * Use the DS to separate the directories in other defines
@@ -17,7 +18,7 @@ if (!defined('DS')) {
 }
 
 /**
- * These defines should only be edited if you have CakePHP installed in
+ * These defines should only be edited if you have cake installed in
  * a directory layout other than the way it is distributed.
  * When using custom settings be sure to use the DS and do not add a trailing DS.
  */
@@ -39,23 +40,20 @@ if (!defined('APP_DIR')) {
 }
 
 /**
- * The absolute path to the "cake" directory, WITHOUT a trailing DS.
- *
- * Un-comment this line to specify a fixed path to CakePHP.
- * This should point at the directory containing `Cake`.
+ * The absolute path to the "Cake" directory, WITHOUT a trailing DS.
  *
  * For ease of development CakePHP uses PHP's include_path. If you
- * cannot modify your include_path set this value.
+ * need to cannot modify your include_path, you can set this path.
  *
  * Leaving this constant undefined will result in it being defined in Cake/bootstrap.php
  *
  * The following line differs from its sibling
- * /app/webroot/index.php
+ * /app/webroot/test.php
  */
 define('CAKE_CORE_INCLUDE_PATH',  ROOT . DS . APP_DIR . DS . 'Vendor' . DS . 'cakephp' . DS . 'cakephp' . DS . 'lib');
 
 /**
- * Editing below this line should NOT be necessary.
+ * Editing below this line should not be necessary.
  * Change at your own risk.
  *
  */
@@ -64,14 +62,6 @@ if (!defined('WEBROOT_DIR')) {
 }
 if (!defined('WWW_ROOT')) {
 	define('WWW_ROOT', dirname(__FILE__) . DS);
-}
-
-// for built-in server
-if (php_sapi_name() === 'cli-server') {
-	if ($_SERVER['REQUEST_URI'] !== '/' && file_exists(WWW_ROOT . $_SERVER['PHP_SELF'])) {
-		return false;
-	}
-	$_SERVER['PHP_SELF'] = '/' . basename(__FILE__);
 }
 
 if (!defined('CAKE_CORE_INCLUDE_PATH')) {
@@ -90,10 +80,10 @@ if (!empty($failed)) {
 	trigger_error("CakePHP core could not be found. Check the value of CAKE_CORE_INCLUDE_PATH in APP/webroot/index.php. It should point to the directory containing your " . DS . "cake core directory and your " . DS . "vendors root directory.", E_USER_ERROR);
 }
 
-App::uses('Dispatcher', 'Routing');
+if (Configure::read('debug') < 1) {
+	throw new NotFoundException(__d('cake_dev', 'Debug setting does not allow access to this URL.'));
+}
 
-$Dispatcher = new Dispatcher();
-$Dispatcher->dispatch(
-	new CakeRequest(),
-	new CakeResponse()
-);
+require_once CAKE . 'TestSuite' . DS . 'CakeTestSuiteDispatcher.php';
+
+CakeTestSuiteDispatcher::run();
