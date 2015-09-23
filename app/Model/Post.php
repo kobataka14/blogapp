@@ -3,12 +3,23 @@ App::uses('AppModel', 'Model');
 /**
  * Post Model
  *
+ * ブログ記事専用モデルです
+ *
+ * @copyright php_ci_book
+ * @link https://wwwww.jp
+ * @since 1.0
+ * @auther taka
  */
 class Post extends AppModel {
 
+/**
+ * 一覧表示時のタイトルに使用するカラム名
+ *
+ * @var string
+ */
 	public $displayField = 'title';
 /**
- * Validation rules
+ * バリデーションルール
  *
  * @var array
  */
