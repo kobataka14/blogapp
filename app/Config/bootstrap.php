@@ -17,6 +17,14 @@
 Cache::config('default', array('engine' => 'File'));
 require_once dirname(dirname(__FILE__)) . DS . 'Vendor' . DS . 'autoload.php';
 include dirname(__FILE__) . DS . 'bootstrap' . DS . 'environments.php';
+
+CakePlugin::load('Migrations');
+CakePlugin::load('BoostCake');
+CakePlugin::load('Users');
+CakePlugin::load('Utils');
+CakePlugin::load('Search');
+
+
 /**
  * The settings below can be used to set additional paths to models, views and controllers.
  *
