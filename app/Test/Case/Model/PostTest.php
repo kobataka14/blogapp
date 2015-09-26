@@ -14,7 +14,7 @@ class PostTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.post'
+		'app.post', 'plugin.users.user'
 	);
 
 /**
@@ -60,5 +60,16 @@ class PostTest extends CakeTestCase {
 			['title', str_pad('', 256, "a"), 'タイトルは255文字以内で入力してください'],
 		];
 	}
+
+	public function test一覧画面は特定ユーザーで5件新しい順である(){
+		Fabricate::create('Post', 10, ['id'=>false, 'title'=>'adminuser post', 'author_id'=>'1']);
+		Fabricate::create('Post', 10, ['id'=>false, 'title'=>'user1 post', 'author_id'=>'37i-9036514i9eoee1102920aououotel888']);
+
+		$actual = $this->Post->find('all', $this->Post->getPaginateSettings('adminuser'));
+		$this->assertCount(5, $actual);
+		$this->assertEquals([10,9,8,7,6], Hash::extract($actual, '{n}.Post.id'));
+		$this->assertEquals('adminuser post', $actual[0]['Post']['title']);
+	}
+
 
 }
