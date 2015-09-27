@@ -17,11 +17,13 @@
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
 //	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
-	
+
 	Router::connect('/blogs/new', ['controller' => 'posts', 'action' => 'add']);
 	Router::connect('/:user_account/blog/*', ['controller' => 'posts', 'action' => 'index'], ['user_account']);
-	
-	
+
+	Router::connect('/users/login', array('controller'=>'app_users','action'=>'login'));
+	Router::connect('/users/logout', array('controller'=>'app_users','action'=>'logout'));
+
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */

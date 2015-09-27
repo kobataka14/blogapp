@@ -23,7 +23,7 @@ CakePlugin::load('BoostCake');
 CakePlugin::load('Users');
 CakePlugin::load('Utils');
 CakePlugin::load('Search');
-
+CakePlugin::load('Users', array('routes'=>null));
 
 /**
  * The settings below can be used to set additional paths to models, views and controllers.
