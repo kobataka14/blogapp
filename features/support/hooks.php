@@ -3,7 +3,7 @@
 
 App::uses('CakeTestCase', 'TestSuite');
 class BddAllFixture extends CakeTestCase {
-	public $fixtures = ['app.post'];
+	public $fixtures = ['app.post', 'plugin.users.user'];
 }
 
 
